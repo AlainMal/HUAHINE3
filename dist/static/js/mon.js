@@ -3774,6 +3774,7 @@ function createBoatConfigModal(config) {
                 <img src="./static/icone/croix.png" alt="Historique" width="16" height="16">
                     Annuler
             </button>
+            &nbsp;&nbsp;
             <button id="saveConfigBtn" style="
                 background: linear-gradient(135deg, #4CAF50, #45a049);
                 color: white;
