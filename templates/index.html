@@ -8,26 +8,8 @@
     <link href="{{ url_for('static', filename='css/mon.css') }}" rel="stylesheet"/>
     <link href="{{ url_for('static', filename='favicon.ico') }}" rel="icon" type="image/x-icon">
     <script src="{{ url_for('static', filename='js/leaflet.js') }}"></script>
-    <script>
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'F1') {
-                event.preventDefault();
-                window.open('http://127.0.0.1:5001/cartes', '_blank');
-            } else if (event.key === 'F2') {
-                event.preventDefault();
-                const url = 'http://127.0.0.1:5000/?lancerHistorique=true&idCarte=123';
-                window.open(url, '_blank');
-            }  else if (event.key === "F9") {
-                console.log("F9 détecté !");
-                event.preventDefault();
 
-                fetch("http://127.0.0.1:5000/focus-huahine")
-                    .then(() => console.log("Requête envoyée"))
-                    .catch(console.error);
-            }
 
-        });
-    </script>
 </head>
 <body>
 
