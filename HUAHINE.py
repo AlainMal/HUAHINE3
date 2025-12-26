@@ -901,7 +901,7 @@ class MainWindow(QMainWindow):
 
             # Créer la fenêtre de navigation si elle n'existe pas déjà
             if not hasattr(self, 'nav_window') or self.nav_window is None:
-                self.nav_window = Navigateur()
+                self.nav_window = Navigateur(parent_window=self)
                 self.nav_window.show()
             else:
                 # Si la fenêtre existe déjà, la mettre au premier plan

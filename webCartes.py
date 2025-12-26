@@ -12,8 +12,9 @@ class BrowserView(QWebEngineView):
         self._temp_views = []  # Empêche la collecte prématurée des vues temporaires
 
 class Navigateur(QMainWindow):
-    def __init__(self):
+    def __init__(self, parent_window=None):
         super().__init__()
+        self.parent_window = parent_window
         self.setWindowTitle("HAUHINE - CARTES MARINES")
         self.setGeometry(200, 100, 1200, 800)
 
@@ -53,7 +54,7 @@ class Navigateur(QMainWindow):
             event.accept()
             QDesktopServices.openUrl(QUrl("http://127.0.0.1:5000/?lancerHistorique=true&idCarte=123"))
             return
-        elif event.key() == Qt.Key_F3:
+        elif event.key() == Qt.Key_F9:
             event.accept()
             profile = self.browser.page().profile()
 
@@ -63,8 +64,12 @@ class Navigateur(QMainWindow):
             profile.cookieStore().deleteAllCookies()  # Cookies
             print("Cache et données effacés — JS/CSS seront rechargés.")
             return True
-        elif event.key() == Qt.Key_F9:
-            print("F9 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+        elif event.key() == Qt.Key_F3:
+            if self.parent_window:
+                self.parent_window.show()
+                self.parent_window.raise_()
+                self.parent_window.activateWindow()
+            return
 
         super().keyPressEvent(event)
 
