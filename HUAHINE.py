@@ -31,8 +31,6 @@ from PyQt5.QtCore import Qt as QtCore
 from PyQt5.QtCore import QAbstractTableModel, QModelIndex, pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.uic import loadUi
-# Importer QtWebEngineWidgets AVANT la création de QApplication pour éviter l'erreur
-from PyQt5 import QtWebEngineWidgets  # Important: doit être importé avant l'instance de Q(Core)Application
 from quart import Quart, render_template, Response, jsonify, request
 
 # Import des packages personnalisés
