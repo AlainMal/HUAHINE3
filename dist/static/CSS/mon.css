@@ -132,6 +132,8 @@ html, body {
     height: 100vh;
     position: fixed;
     overflow: hidden;
+    background-color: #e6eef2;
+
 }
 
 /* ===== PANNEAU D'INFORMATIONS ===== */
