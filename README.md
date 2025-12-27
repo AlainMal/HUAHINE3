@@ -256,4 +256,4 @@ Remarque : Si vous êtes branché à la place de la terminaison, il faut ajouter
         en laissant les numéros de trames de côté, peut-être en prenant les 6 octets pour la trame 0 et les 7 octets pour les autres de poids fort, simplement sur les
         trames qui ont plus de 8 octets (fast-packet PGN) et je pense qu'il prend toutes les trames d'un même PGN et aprés qu'il lance le décodage de tous les bits,
         moi, je décode trame par trame et je fais une mise en mémoire pour les trames dont les codes se situent sur
-        plusieurs trames, mais je suis un peu plus rapide. A part pour les trames qui ont plus de deux trames pour définir une valeur soit plus de 14 octets, c'est le cas pour les noms des bateaux qui font 20 octets, c'est peut être plus rapide à émmetre, mais pour la reception c'est un peu compliqué à déduire si les numéros de trames ne se succèdent pas, ce n'est valable que pour les anciens qui émetres les trames dans le désordres, pour moi, elles sont toutes émisent dans le bon ordre.
+        plusieurs trames, mais je suis un peu plus rapide.
