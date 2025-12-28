@@ -3976,12 +3976,12 @@ function centerOnBoat() {
 // ==============================================
 // 18. INITIALISATION ET GESTIONNAIRES D'ÉVÉNEMENTS
 // ==============================================
-// Avertissement de sortie: ne pas appeler preventDefault (cause problèmes sur Firefox après "Rester sur la page")
+// Avertissement de sortie ne pas appeler preventDefault (cause problèmes sur Firefox après "Rester sur la page")
 window.addEventListener("beforeunload", (e) => {
     e.preventDefault();
 
     // Déclenche un prompt natif uniquement si nécessaire
-    // Laisser la chaîne vide suffit pour Chrome/Edge; Firefox affiche un message générique.
+    // Laisser la chaîne vide suffit pour Chrome/Edge ; Firefox affiche un message générique.
     e.returnValue = "";
 });
 
@@ -4204,21 +4204,21 @@ document.getElementById('f_close-button').addEventListener('click', () => {
 
 });
 
+ // Envoi la commande PGN 59904
 document.getElementById('f_raf-button').addEventListener('click', async () => {
-      // Envoi la commande PGN 59904
-  try {
-    const response = await fetch('/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    try {
+        const response = await fetch('/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
 
-    const result = await response.json();
-    console.log('Réponse du backend :', result);
-  } catch (error) {
-    console.error('Erreur lors de l’appel à send:', error);
-  }
+        const result = await response.json();
+        console.log('Réponse du backend :', result);
+      } catch (error) {
+            console.error('Erreur lors de l’appel à send:', error);
+      }
   await new Promise(resolve => setTimeout(resolve, 2000));
 
   await loadConfig();
