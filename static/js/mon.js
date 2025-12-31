@@ -2782,9 +2782,9 @@ const updatePosition = async () => {
                 sog: data.sog || 0,
                 cog: data.cog || 0,
                 w_speed_true: data.w_speed_true || 0,
-                w_angle_true: normalizeSignedDeg(data.w_angle_true),
+                w_angle_true: normalizeDeg(data.w_angle_true),
                 w_speed_app: data.w_speed_app || 0,
-                w_angle_app: data.w_angle_app || 0,
+                w_angle_app: normalizeDeg(data.w_angle_app),
                 boat_info: data.boat_info
             };
 
@@ -2801,7 +2801,7 @@ const updatePosition = async () => {
                             cog: data.cog || 0,
                             sog: data.sog,
                             w_speed_true: data.w_speed_true || 0,
-                            w_angle_true: normalizeSignedDeg(data.w_angle_true),
+                            w_angle_true: normalizeDeg(data.w_angle_true),
                             w_speed_app: data.w_speed_app || 0,
                             w_angle_app: data.w_angle_app || 0,
                             timestamp: new Date().toISOString()

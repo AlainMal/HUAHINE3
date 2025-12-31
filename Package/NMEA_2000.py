@@ -1415,11 +1415,24 @@ class NMEA2000:
     # Méthode qui retourne les coordonnées dans un dictionnaire.
     @staticmethod
     def update_coordinates(**kwargs) -> dict[str, float | dict]:
+        def _norm360(val: float) -> float:
+            try:
+                a = float(val) % 360.0
+                if a < 0:
+                    a += 360.0
+                return a
+            except Exception:
+                return val
+
         return_coordinates = {}
         for key, value in kwargs.items():
             if value is not None:
                 try:
-                    return_coordinates[key] = float(value)
+                    # Normaliser les angles de vent côté backend pour garantir [0,360)
+                    if key in ("w_angle_true", "w_angle_app"):
+                        return_coordinates[key] = _norm360(value)
+                    else:
+                        return_coordinates[key] = float(value)
                 except (TypeError, ValueError):
                     return_coordinates[key] = value
         return return_coordinates

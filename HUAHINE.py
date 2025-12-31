@@ -1124,8 +1124,33 @@ class HistoryFileManager:
             filename = os.path.basename(filename)
             file_path = os.path.join(HistoryFileManager.STATIC_FOLDER, filename)
 
+            # Sanitize: garantir angles de vent en [0,360)
+            def _norm360(v):
+                try:
+                    a = float(v) % 360.0
+                    if a < 0:
+                        a += 360.0
+                    return a
+                except Exception:
+                    return v
+
+            sanitized = []
+            if isinstance(history_data, list):
+                for item in history_data:
+                    if isinstance(item, dict):
+                        it = dict(item)
+                        if 'w_angle_true' in it and it['w_angle_true'] is not None:
+                            it['w_angle_true'] = _norm360(it['w_angle_true'])
+                        if 'w_angle_app' in it and it['w_angle_app'] is not None:
+                            it['w_angle_app'] = _norm360(it['w_angle_app'])
+                        sanitized.append(it)
+                    else:
+                        sanitized.append(item)
+            else:
+                sanitized = history_data
+
             with open(file_path, 'w') as f:
-                json.dump(history_data, f)
+                json.dump(sanitized, f)
 
             return {"status": "success", "message": f"Historique sauvegardé dans {filename}"}
 
