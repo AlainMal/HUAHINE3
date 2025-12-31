@@ -190,7 +190,7 @@ Visualiser la carte en cliquant sur le bouton en forme de voilier
     Vous pouvez centrer votre bateau en cliquant sûr 👁️
     Vous pouvez diminuer ou augmenter le zoom.
     
-![carte](https://github.com/AlainMal/HUAHINE2-Alain/blob/master/aide/static/images/Carte.png)
+![carte](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/Carte.png)
 
 Comment installer l'application (binaire)
 
