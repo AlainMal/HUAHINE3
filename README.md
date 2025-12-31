@@ -210,7 +210,7 @@ Branchement sur le bus NMEA 2000.
 ![canusb-con-diagram](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/canusb-con-diagram.png)
 
 ![PriseNMEA2000](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/PriseNMEA2000.png)
-![BorneNMEA2000](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/BorneNMEA2000;png)
+![BorneNMEA2000](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/BorneNMEA2000.png)
 
 Vous n'avez qu'à brancher les bornes CAN_H et CAN_L sur les pins 4 et 5 du NMEA2000.
 
