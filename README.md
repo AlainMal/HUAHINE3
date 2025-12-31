@@ -206,7 +206,7 @@ Comment installer l'application (binaire)
 
 Branchement sur le bus NMEA 2000.
 
-![cia102](https://github.com/user-attachments/assets/68bbc585-ef4f-48e1-91e3-e4ea0b62e643)
+![cia102](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/cia102.gif)
 ![canusb-con-diagram](https://github.com/user-attachments/assets/72747658-5c75-4fa4-a761-48f16d9df915)
 
 ![PriseNMEA2000](https://github.com/user-attachments/assets/1fd486f8-9b12-4f02-a793-cdbbbd8174a0)
