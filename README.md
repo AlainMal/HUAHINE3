@@ -207,10 +207,10 @@ Comment installer l'application (binaire)
 Branchement sur le bus NMEA 2000.
 
 ![cia102](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/cia102.gif)
-![canusb-con-diagram](https://github.com/user-attachments/assets/72747658-5c75-4fa4-a761-48f16d9df915)
+![canusb-con-diagram](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/canusb-con-diagram.png)
 
-![PriseNMEA2000](https://github.com/user-attachments/assets/1fd486f8-9b12-4f02-a793-cdbbbd8174a0)
-![BorneNMEA2000](https://github.com/user-attachments/assets/f40b3442-f96d-48ae-b942-94397441630e)
+![PriseNMEA2000](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/PriseNMEA2000.png)
+![BorneNMEA2000](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/BorneNMEA2000;png)
 
 Vous n'avez qu'à brancher les bornes CAN_H et CAN_L sur les pins 4 et 5 du NMEA2000.
 
