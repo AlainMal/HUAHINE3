@@ -145,7 +145,7 @@ Racine (extrait):
 ## Guide d’utilisation (conservé)
 Vous avez HUAHINE.exe dans le répertoire 'dist'
 
-![ecran](https://github.com/user-attachments/assets/9dbf02d2-b920-48c7-89fd-78d5ecb0342d)
+![ecran](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/ecran.png)
 
 Bienvenue dans le guide d'utilisation de HUAHINE. Cette application vous permet de gérer et visualiser vos données géographiques.
 Fonctionnalités principales
