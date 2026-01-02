@@ -145,7 +145,7 @@ Racine (extrait):
 ## Guide d’utilisation (conservé)
 Vous avez HUAHINE.exe dans le répertoire 'dist'
 
-![ecran](https://github.com/user-attachments/assets/9dbf02d2-b920-48c7-89fd-78d5ecb0342d)
+![ecran](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/ecran.png)
 
 Bienvenue dans le guide d'utilisation de HUAHINE. Cette application vous permet de gérer et visualiser vos données géographiques.
 Fonctionnalités principales
@@ -190,7 +190,7 @@ Visualiser la carte en cliquant sur le bouton en forme de voilier
     Vous pouvez centrer votre bateau en cliquant sûr 👁️
     Vous pouvez diminuer ou augmenter le zoom.
     
-![carte](https://github.com/AlainMal/HUAHINE2-Alain/blob/master/aide/static/images/Carte.png)
+![carte](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/Carte.png)
 
 Comment installer l'application (binaire)
 
@@ -206,11 +206,11 @@ Comment installer l'application (binaire)
 
 Branchement sur le bus NMEA 2000.
 
-![cia102](https://github.com/user-attachments/assets/68bbc585-ef4f-48e1-91e3-e4ea0b62e643)
-![canusb-con-diagram](https://github.com/user-attachments/assets/72747658-5c75-4fa4-a761-48f16d9df915)
+![cia102](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/cia102.gif)
+![canusb-con-diagram](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/canusb-con-diagram.png)
 
-![PriseNMEA2000](https://github.com/user-attachments/assets/1fd486f8-9b12-4f02-a793-cdbbbd8174a0)
-![BorneNMEA2000](https://github.com/user-attachments/assets/f40b3442-f96d-48ae-b942-94397441630e)
+![PriseNMEA2000](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/PriseNMEA2000.png)
+![BorneNMEA2000](https://github.com/AlainMal/HUAHINE3/blob/master/aide/static/images/BorneNMEA2000.png)
 
 Vous n'avez qu'à brancher les bornes CAN_H et CAN_L sur les pins 4 et 5 du NMEA2000.
 
