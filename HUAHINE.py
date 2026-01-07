@@ -44,9 +44,11 @@ from Package.Constante import *
 
 # Fenêtre de vent gérée côté frontend (Fenêtre1.js)
 
+# Méthode pour définir les ressource PATH ------------------------------------------------------------------------------
 def resource_path(relative_path):
     base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
     return os.path.join(base_path, relative_path)
+
 # ********************************** CLASSE MODÈLE DE LA TABLE *********************************************************
 # Cette classe sert de modèle à la table incluse dans MainWindow().
 class TableModel(QAbstractTableModel):
@@ -114,20 +116,6 @@ class TableModel(QAbstractTableModel):
         return None
 # ************************************ FIN DE LA CLASSE TableModel *****************************************************
 
-# Méthode asynchrone pour nettoyer les tâches --------------------------------------------------------------------------
-async def cleanup():
-    print("Nettoyage des tâches en cours...")
-
-    # Annulation de toutes les tâches en cours
-    for task in asyncio.all_tasks():
-        if task is not asyncio.current_task():
-            task.cancel()
-            try:
-                await task
-            except asyncio.CancelledError:
-                pass
-
-    print("Nettoyage terminé")
 # ***************************************** FENÊTRE PRINCIPAL ********************************************************
 # noinspection PyUnresolvedReferences
 class MainWindow(QMainWindow):
@@ -257,6 +245,7 @@ class MainWindow(QMainWindow):
     @property
     def nmea_2000(self):
         return self._nmea_2000
+
     # ==================================== DEBUT DES MÉTHODES LIÉES A LA TABLE =========================================
     # Méthode pour configurer la taille des colonnes de la table. ------------------------------------------------------
     def configurer_colonnes(self):
@@ -383,7 +372,6 @@ class MainWindow(QMainWindow):
             # Réinitialise la valeur précédente
             self.line_table.setText(str(self._buffer_capacity))
     # ================================ FIN DES MÉTHODES LIÉES A LA TABLE ===============================================
-
 
     # ============================== DEBUT DES MÉTHODES LIÉES A L'APPLICATION ==========================================
     # Méthode pour arrêter toutes les tâches ---------------------------------------------------------------------------
@@ -1218,6 +1206,7 @@ class HistoryFileManager:
                 "status": "error",
                 "message": f"Erreur lors de la suppression: {str(error)}"
             }
+
 # ========================================== GESTIONNAIRE DE FICHIERS DE ROUTES =====================================
 class RouteFileManager:
     """Gestionnaire des fichiers de routes"""
@@ -1381,7 +1370,6 @@ async def get_tile(z, x, y):
 
 # ========================================== ROUTES DES VENTS (supprimées — géré côté frontend) ======================
 
-
 # ========================================== ROUTES API ===========================================================
 @quart_app.route('/api/get_coordinates')
 async def get_coordinates():
@@ -1498,7 +1486,7 @@ import math
 
 def calculate_distance_nm(lat1, lon1, lat2, lon2):
     """
-    Calcule la distance entre deux points en milles nautiques
+    Calcule la distance entre deux points en milles nautiques en haversine
     """
     if any(coord is None or coord == 'N/A' for coord in [lat1, lon1, lat2, lon2]):
         return 'N/A'
@@ -1817,6 +1805,26 @@ def bring_to_front(window_title):
 async def focus_huahine():
     bring_to_front("CAN bus et NMEA 2000 en temps réel")  # Titre exact de ta fenêtre PyQt
     return "OK"
+
+# Méthode asynchrone pour arrêter les tâches ---------------------------------------------------------------------------
+async def cleanup(window):
+    print("Nettoyage en cours...")
+
+    # Arrêter Quart
+    if getattr(window, "quart_running", False):
+        try:
+            asyncio.ensure_future(window.arreter_quart())
+        except Exception as e:
+            print(f"[CLEANUP] Erreur arreter_quart: {e}")
+        window.quart_running = False
+
+    # Annuler les tâches
+    tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+    for t in tasks:
+        t.cancel()
+
+    print("Nettoyage terminé")
+    sys.exit(0)
 # ********************************************* LANCE L'APPLICATION ****************************************************
 if __name__ == "__main__":
     # Rediriger les print vers un fichier de log SEULEMENT pour l'exe
@@ -1869,49 +1877,7 @@ if __name__ == "__main__":
                 return
             shutting_down = True
             print("Arrêt de l'application demandé...")
-
-            async def cleanup():
-                try:
-                    print("Nettoyage en cours...")
-
-                    # Arrêter le serveur Quart s'il tourne
-                    if hasattr(window, 'quart_running') and window.quart_running:
-                        print("[CLEANUP] Arrêt du serveur Quart demandé (best-effort, non bloquant)...")
-                        try:
-                            # Lancer l'arrêt du serveur sans attendre, pour ne pas bloquer le nettoyage
-                            asyncio.ensure_future(window.arreter_quart())
-                        except Exception as e:
-                            print(f"[CLEANUP] Erreur lors du lancement de arreter_quart: {e}")
-                        finally:
-                            try:
-                                window.quart_running = False
-                            except Exception:
-                                pass
-
-                    # Annuler toutes les tâches en cours (sauf la tâche courante)
-                    tasks = [t for t in asyncio.all_tasks() if not t.done() and t is not asyncio.current_task()]
-                    if tasks:
-                        print(f"Annulation de {len(tasks)} tâches en cours...")
-                        # sys.exit(0) # ------ SORTIR DE LA APPLICATION avec code 0 ------>>>>
-                        for task in tasks:
-                            task.cancel()
-
-                    print("Nettoyage terminé")
-
-                except Exception as error:
-                    print(f"Erreur lors du nettoyage: {error}")
-                sys.exit(0)
-
-            # Programmer le nettoyage de manière directe sur la boucle en cours
-            if loop.is_running():
-                print("Programmation du nettoyage...")
-                try:
-                    asyncio.ensure_future(cleanup(), loop=loop)
-                    print("Nettoyage planifié sur la boucle")
-                except Exception as e:
-                    print(f"Erreur lors de la programmation du nettoyage: {e}")
-            else:
-                print("La boucle n'est plus en cours d'exécution")
+            asyncio.ensure_future(cleanup(window), loop=loop)
 
         # Exposer le gestionnaire sur la fenêtre pour permettre un appel direct
         window.handle_shutdown = handle_shutdown

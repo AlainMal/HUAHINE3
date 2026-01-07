@@ -3,81 +3,6 @@ import math
 from Package.Constante import *
 from Package.MMSI import *
 
-def log_ligne(texte):
-    with open("output.txt", "a", encoding="utf-8") as f:
-        f.write(texte + "\n")
-
-
-def true_wind(VA, AWA, SOG, COG, HDG=None, boat_vector_use_hdg=False):
-    """
-    Calcule le vent réel (sur le fond) à partir du vent apparent.
-    - VA: vitesse du vent apparent (nds)
-    - AWA: angle du vent apparent en degrés, relatif à l'étrave (0..360)
-    - SOG: vitesse du bateau (nds). Si boat_vector_use_hdg=True, interprété comme STW ; sinon SOG.
-    - COG: cap fond (degrés 0..360)
-    - HDG: cap compas/route du bateau (degrés 0..360). Si fourni, on l'utilise
-            pour référencer l'angle du vent apparent au repère Terre.
-    - boat_vector_use_hdg: si True et HDG fourni, le vecteur vitesse du bateau
-            est orienté selon HDG (cas STW). Sinon, il est orienté selon COG (cas SOG).
-    Retourne (vitesse_vent_réel, angle_vent_réel_degrés_0_360)
-    """
-    # Angle du vent apparent dans le repère Terre
-    ref = HDG if HDG is not None else COG
-    awa_earth = (ref + AWA) % 360.0
-
-    # Vecteur vent apparent dans le repère Terre
-    VA_x = VA * math.cos(math.radians(awa_earth))
-    VA_y = VA * math.sin(math.radians(awa_earth))
-
-    # Vecteur vitesse du bateau
-    boat_dir = HDG if (boat_vector_use_hdg and HDG is not None) else COG
-    SOG_x = -SOG * math.cos(math.radians(boat_dir))
-    SOG_y = -SOG * math.sin(math.radians(boat_dir))
-
-    # Somme vectorielle = vent réel (sur le fond)
-    VT_x = VA_x + SOG_x
-    VT_y = VA_y + SOG_y
-
-    VT_speed = math.hypot(VT_x, VT_y)
-    VT_angle = math.degrees(math.atan2(VT_y, VT_x))
-    if VT_angle < 0:
-        VT_angle += 360.0
-
-    return VT_speed, VT_angle
-
-# Moyenne circulaire en degrés pour des angles [0,360)
-def circular_mean_deg(values):
-    try:
-        n = len(values)
-        if n == 0:
-            return None
-        s = 0.0
-        c = 0.0
-        for v in values:
-            rad = math.radians(float(v))
-            s += math.sin(rad)
-            c += math.cos(rad)
-        if s == 0.0 and c == 0.0:
-            # angles opposés parfaits : retourner simplement le premier normalisé
-            return float(values[0]) % 360.0
-        ang = math.degrees(math.atan2(s, c))
-        if ang < 0.0:
-            ang += 360.0
-        return ang
-    except Exception as e1:
-        print(f"Moyenne arithmétique normalisée : {e1}")
-        # En cas d'anomalie, repli : moyenne arithmétique normalisée
-        try:
-            avg = sum(float(v) for v in values) / len(values)
-            avg = avg % 360.0
-            if avg < 0:
-                avg += 360.0
-            return avg
-        except Exception as e2:
-            print(f"[circular_mean_deg] Erreur dans le repli : {e2}")
-
-            return None
-
 # **********************************************************************************************************************
 #       Programme d'analyse des trames du bus CAN et les transforment en NMEA 2000
 # **********************************************************************************************************************
@@ -177,7 +102,7 @@ class NMEA2000:
 
         # Défini la taille de la mémoire, elle est calculé au plus juste, mais c'est la plus rapide.
         nombre_octets = 8
-        nombre_pgn = 25
+        nombre_pgn = 25     # On a plus de PGN mais
         nombre_trames = 36  # On limite la valeur à 36 le nombre maximum de trames sur le même PGN.
         valeur_defaut = 0
 
@@ -269,7 +194,7 @@ class NMEA2000:
             raise ValueError(f"Adresse de nœud invalide : {source}")
         self.adresses_detectees.add(source)
 
-        log_ligne(f"SOURCE = {self._source} du PGN {self._pgn}")
+        # log_ligne(f"SOURCE = {self._source} du PGN {self._pgn}")
 
         try:
             match int(self._pgn):
@@ -463,7 +388,7 @@ class NMEA2000:
                         self._buffer_w_speed_app.append(self._valeurChoisie1)
                         self._buffer_w_angle_app.append(self._valeurChoisie2)
 
-                        if NMEA2000.windApp % 10 == 0:
+                        if NMEA2000.windApp % 2 == 0:
                             if self._buffer_w_speed_app and self._buffer_w_angle_app:
                                 self._windSpeedMoiApp = sum(self._buffer_w_speed_app) / len(self._buffer_w_speed_app)
                                 self._windAngleMoiApp = circular_mean_deg(self._buffer_w_angle_app)
@@ -1412,6 +1337,14 @@ class NMEA2000:
             self._definition
         )
 
+    # Méthode asynchrone pour mettre à jour mes coordonnées. -----------------------------------------------------------
+    async def safe_update_coordinates(self, **kwargs):
+        try:
+            updated = self.update_coordinates(**kwargs)     # Appelle la fonction qui retourne les coordonnées
+            self._coordinates.update(updated)               # Mise à jour du dictionnaire globale "coordinates"
+        except Exception as e:
+            print(f"Erreur dans update_coordinates : {e}")
+
     # Méthode qui retourne les coordonnées dans un dictionnaire.
     @staticmethod
     def update_coordinates(**kwargs) -> dict[str, float | dict]:
@@ -1437,11 +1370,76 @@ class NMEA2000:
                     return_coordinates[key] = value
         return return_coordinates
 
-    # Méthode asynchrone pour mettre à jour mes coordonnées sur HUAHINE.py. -----------------------------------------------------------
-    async def safe_update_coordinates(self, **kwargs):
-        try:
-            updated = self.update_coordinates(**kwargs)     # Appelle la fonction qui retourne les coordonnées
-            self._coordinates.update(updated)               # Mise à jour du dictionnaire globale "coordinates"
-        except Exception as e:
-            print(f"Erreur dans update_coordinates : {e}")
+# def log_ligne(texte):
+#    with open("output.txt", "a", encoding="utf-8") as f:
+#        f.write(texte + "\n")
 
+def true_wind(VA, AWA, SOG, COG, HDG=None, boat_vector_use_hdg=False):
+    """
+    Calcule le vent réel (sur le fond) à partir du vent apparent.
+    - VA: vitesse du vent apparent (nds)
+    - AWA: angle du vent apparent en degrés, relatif à l'étrave (0..360)
+    - SOG: vitesse du bateau (nds). Si boat_vector_use_hdg=True, interprété comme STW ; sinon SOG.
+    - COG: cap fond (degrés 0..360)
+    - HDG: cap compas/route du bateau (degrés 0..360). Si fourni, on l'utilise
+            pour référencer l'angle du vent apparent au repère Terre.
+    - boat_vector_use_hdg: si True et HDG fourni, le vecteur vitesse du bateau
+            est orienté selon HDG (cas STW). Sinon, il est orienté selon COG (cas SOG).
+    Retourne (vitesse_vent_réel, angle_vent_réel_degrés_0_360)
+    """
+    # Angle du vent apparent dans le repère Terre
+    ref = HDG if HDG is not None else COG
+    awa_earth = (ref + AWA) % 360.0
+
+    # Vecteur vent apparent dans le repère Terre
+    VA_x = VA * math.cos(math.radians(awa_earth))
+    VA_y = VA * math.sin(math.radians(awa_earth))
+
+    # Vecteur vitesse du bateau
+    boat_dir = HDG if (boat_vector_use_hdg and HDG is not None) else COG
+    SOG_x = -SOG * math.cos(math.radians(boat_dir))
+    SOG_y = -SOG * math.sin(math.radians(boat_dir))
+
+    # Somme vectorielle = vent réel (sur le fond)
+    VT_x = VA_x + SOG_x
+    VT_y = VA_y + SOG_y
+
+    VT_speed = math.hypot(VT_x, VT_y)
+    VT_angle = math.degrees(math.atan2(VT_y, VT_x))
+    if VT_angle < 0:
+        VT_angle += 360.0
+
+    return VT_speed, VT_angle
+
+# Moyenne circulaire en degrés pour des angles [0,360)
+def circular_mean_deg(values):
+    try:
+        n = len(values)
+        if n == 0:
+            return None
+        s = 0.0
+        c = 0.0
+        for v in values:
+            rad = math.radians(float(v))
+            s += math.sin(rad)
+            c += math.cos(rad)
+        if s == 0.0 and c == 0.0:
+            # angles opposés parfaits : retourner simplement le premier normalisé
+            return float(values[0]) % 360.0
+        ang = math.degrees(math.atan2(s, c))
+        if ang < 0.0:
+            ang += 360.0
+        return ang
+    except Exception as e1:
+        print(f"Moyenne arithmétique normalisée : {e1}")
+        # En cas d'anomalie, repli : moyenne arithmétique normalisée
+        try:
+            avg = sum(float(v) for v in values) / len(values)
+            avg = avg % 360.0
+            if avg < 0:
+                avg += 360.0
+            return avg
+        except Exception as e2:
+            print(f"[circular_mean_deg] Erreur dans le repli : {e2}")
+
+            return None
