@@ -621,7 +621,7 @@ const updateAISMarker = (ship) => {
       if (mmsi.length === 8) return '#FFD700'; // jaune
       if (mmsi.length === 10) return '#9E9E9E'; // gris
       if (mmsi.length === 9) {
-        return classe === 'A' ? '#1E90FF' : '#FF9800'; // bleu ou orange
+        return classe === 'A' ? '#0000FF' : '#FF0000'; // bleu ou orange
       }
       return '#000000'; // couleur par défaut si aucune condition ne correspond
     }
@@ -1045,7 +1045,7 @@ window.showShipDetails = (mmsi) => {
         </div>
         
         <div style="padding: 15px; max-height: 500px; overflow-y: auto;">
-            <div style="display: grid; gap: 12px;">
+            <div style="display: grid; gap: 12px;">ESW
                 
                 <!-- Informations principales -->
                 <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #1e88e5;">
@@ -1054,7 +1054,7 @@ window.showShipDetails = (mmsi) => {
                         <div><strong>MMSI:</strong> <span style="font-family: monospace;">${ship.mmsi}</span></div>
                         <div><strong>Nom:</strong> ${ship.name || 'Non disponible'}</div>
                         <div><strong>Classe AIS:</strong> 
-                            <span style="background: ${ship.classe === 'A' ? '#4CAF50' : '#FF9800'}; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
+                            <span style="background: ${ship.classe === 'A' ? '#0000FF' : '#FF0000'}; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
                                 ${ship.classe}
                             </span>
                         </div>
