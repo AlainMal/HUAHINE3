@@ -621,7 +621,7 @@ const updateAISMarker = (ship) => {
       if (mmsi.length === 8) return '#FFD700'; // jaune
       if (mmsi.length === 10) return '#9E9E9E'; // gris
       if (mmsi.length === 9) {
-        return classe === 'A' ? '#1E90FF' : '#FF9800'; // bleu ou orange
+        return classe === 'A' ? '#0000FF' : '#FF0000'; // bleu ou orange
       }
       return '#000000'; // couleur par défaut si aucune condition ne correspond
     }
@@ -1045,7 +1045,7 @@ window.showShipDetails = (mmsi) => {
         </div>
         
         <div style="padding: 15px; max-height: 500px; overflow-y: auto;">
-            <div style="display: grid; gap: 12px;">
+            <div style="display: grid; gap: 12px;">ESW
                 
                 <!-- Informations principales -->
                 <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #1e88e5;">
@@ -1054,7 +1054,7 @@ window.showShipDetails = (mmsi) => {
                         <div><strong>MMSI:</strong> <span style="font-family: monospace;">${ship.mmsi}</span></div>
                         <div><strong>Nom:</strong> ${ship.name || 'Non disponible'}</div>
                         <div><strong>Classe AIS:</strong> 
-                            <span style="background: ${ship.classe === 'A' ? '#4CAF50' : '#FF9800'}; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
+                            <span style="background: ${ship.classe === 'A' ? '#0000FF' : '#FF0000'}; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
                                 ${ship.classe}
                             </span>
                         </div>
@@ -3976,12 +3976,12 @@ function centerOnBoat() {
 // ==============================================
 // 18. INITIALISATION ET GESTIONNAIRES D'ÉVÉNEMENTS
 // ==============================================
-// Avertissement de sortie: ne pas appeler preventDefault (cause problèmes sur Firefox après "Rester sur la page")
+// Avertissement de sortie ne pas appeler preventDefault (cause problèmes sur Firefox après "Rester sur la page")
 window.addEventListener("beforeunload", (e) => {
     e.preventDefault();
 
     // Déclenche un prompt natif uniquement si nécessaire
-    // Laisser la chaîne vide suffit pour Chrome/Edge; Firefox affiche un message générique.
+    // Laisser la chaîne vide suffit pour Chrome/Edge ; Firefox affiche un message générique.
     e.returnValue = "";
 });
 
@@ -4204,21 +4204,21 @@ document.getElementById('f_close-button').addEventListener('click', () => {
 
 });
 
+ // Envoi la commande PGN 59904
 document.getElementById('f_raf-button').addEventListener('click', async () => {
-      // Envoi la commande PGN 59904
-  try {
-    const response = await fetch('/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    try {
+        const response = await fetch('/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
 
-    const result = await response.json();
-    console.log('Réponse du backend :', result);
-  } catch (error) {
-    console.error('Erreur lors de l’appel à send:', error);
-  }
+        const result = await response.json();
+        console.log('Réponse du backend :', result);
+      } catch (error) {
+            console.error('Erreur lors de l’appel à send:', error);
+      }
   await new Promise(resolve => setTimeout(resolve, 2000));
 
   await loadConfig();

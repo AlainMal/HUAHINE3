@@ -1569,6 +1569,7 @@ async def get_ais_ships():
                 'last_update': 'En cours',
                 'long': ship.get('long', 'N/A'),
                 'large': ship.get('large', 'N/A')
+                # 'last_update': time
 
             }
             ships_data.append(ship_info)

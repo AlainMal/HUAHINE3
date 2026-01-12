@@ -208,8 +208,8 @@ class CANApplication(QMainWindow):
                 if self._msg:  # Si une trame est reçue
                     n += 1
 
-                    # On appelle la fenêtre de la map dès qu'il y a au moins 100 trames reçues
-                    if n == 100:
+                    # On appelle la fenêtre de la map dès qu'il y a au moins 50 trames reçues
+                    if n == 50:
                         self._main_window.on_click_map()
 
                     self.lab_connection.setText(str(n))  # Mise à jour du nombre de trames reçues.

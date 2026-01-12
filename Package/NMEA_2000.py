@@ -1047,14 +1047,14 @@ class NMEA2000:
                         self._valeurChoisie2 = datas[5]
                         self._pgn2 = "État de charge"
 
-                        self._valeurChoisie2 = datas[6]
-                        self._pgn2 = "État de santé"
+                        self._valeurChoisie3 = datas[6]
+                        self._pgn3 = "État de santé"
 
                         self.set_memoire(MEMOIRE_PGN_a7,PGN_127506,z + 1,datas[7])
 
                     elif z == 1:
                         if not self.get_memoire(MEMOIRE_PGN_a7,PGN_127506,z) == 0xFF:
-                            self._pgn2 = "Temps restant en heures"
+                            self._pgn2 = "Temps restant en minutes"
                             if datas[1] & 0xEF != 0xEF:
                                 self._valeurChoisie2 = (datas[1] << 8
                                                     | self.get_memoire(MEMOIRE_PGN_a7,PGN_127506,z))
@@ -1186,21 +1186,21 @@ class NMEA2000:
 
                     elif z in [1, 2, 3, 4]:
                         self._pgn2 = "Modèle"
-                        if datas[1] & 0xEF != 0xEF:
-                            # Concatène tous les caractères utiles (ignore 0xFF et 0x00) sans conditionner à un octet précis
-                            chunk_chars = []
-                            for i in range(1, 8):
-                                b = datas[i]
-                                if b in (0xFF, 0x00):
-                                    continue
-                                chunk_chars.append(chr(b))
-                            self._valeurChoisie2 = "".join(chunk_chars)
+                        # if datas[1] & 0xEF != 0xEF:
+                        # Concatène tous les caractères utiles (ignore 0xFF et 0x00) sans conditionner à un octet précis
+                        chunk_chars = []
+                        for i in range(1, 8):
+                            b = datas[i]
+                            if b in (0xFF, 0x00):
+                                continue
+                            chunk_chars.append(chr(b))
+                        self._valeurChoisie2 = "".join(chunk_chars)
 
-                            if self._source in self._temp_config and self._temp_config[source]['config'] is not None:
-                                self._temp_config[source]['config'] += self._valeurChoisie2
-                            else:
-                                # Cas rare : trame reçue sans trame 0 préalable
-                                self._temp_config[source] = {'source': self._source, 'config': self._valeurChoisie2}
+                        if self._source in self._temp_config and self._temp_config[source]['config'] is not None:
+                            self._temp_config[source]['config'] += self._valeurChoisie2
+                        else:
+                            # Cas rare : trame reçue sans trame 0 préalable
+                            self._temp_config[source] = {'source': self._source, 'config': self._valeurChoisie2}
 
                     elif z in [5, 6, 7, 8]:
                         self._pgn2 = "Version"
@@ -1377,8 +1377,8 @@ class NMEA2000:
 def true_wind(VA, AWA, SOG, COG, HDG=None, boat_vector_use_hdg=False):
     """
     Calcule le vent réel (sur le fond) à partir du vent apparent.
-    - VA: vitesse du vent apparent (nds)
-    - AWA: angle du vent apparent en degrés, relatif à l'étrave (0..360)
+    - VA: vitesse du vent apparent (nds).
+    - AWA: angle du vent apparent en degrés, relatif à l'étrave (0..360).
     - SOG: vitesse du bateau (nds). Si boat_vector_use_hdg=True, interprété comme STW ; sinon SOG.
     - COG: cap fond (degrés 0..360)
     - HDG: cap compas/route du bateau (degrés 0..360). Si fourni, on l'utilise
