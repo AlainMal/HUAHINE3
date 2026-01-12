@@ -8,7 +8,7 @@ __pycache__/
 venv/
 
 # Fichiers générés
-*.exe
+.exe
 *.log
 *.txt
 *.mbtiles
