@@ -145,7 +145,15 @@ class CANApplication(QMainWindow):
         except Exception:
             nmea_ref = None
 
-        self._can_interface = CANDll(self._stop_flag, nmea_ref)
+        # Backend évolutif: on conserve CANDll mais on expose aussi un CanBackend optionnel
+        try:
+            from Package.backend.can_backend import CanBackend
+            self._can_backend = CanBackend(CANDll(self._stop_flag, nmea_ref))
+            self._can_interface = self._can_backend.dll  # compatibilité existante
+        except Exception:
+            # Fallback si backend indisponible
+            self._can_backend = None
+            self._can_interface = CANDll(self._stop_flag, nmea_ref)
 
         # Gestion des tâches asynchrones et état
         self._handle = handle  # Handle CAN
