@@ -489,7 +489,7 @@ class MainWindow(QMainWindow):
         self.unsetCursor()
         self.can_interface_app._file_path = self._file_path
 
-    # Méthode pour importer les données du fichier texte sur la table. -------------------------------------------------------
+    # Méthode pour importer les données du fichier texte sur la table. -------------------------------------------------
     def on_click_import(self):
         if not self._file_path:
             QMessageBox.information(self, "IMPORTER LE FICHIER",
