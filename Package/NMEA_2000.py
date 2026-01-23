@@ -1258,9 +1258,27 @@ class NMEA2000:
                     self._pgn1 = "Info Configuration"
 
                     if z == 0:
+                        self._buffer = []
                         self._pgn2 = "Configuration"
-                        if datas[6] & 0xEF != 0xEF:
-                            self._valeurChoisie2 = "".join([chr(datas[i]) for i in range(1, 7)])
+                        if datas[2] != 2:
+                            self._pgn2 = "Description"
+                            self._valeurChoisie2 = "".join([chr(datas[i]) for i in range(4, 8)])
+                        elif datas[2+datas[2]] != 2:
+                            self._pgn2 = "Description"
+                            self._valeurChoisie2 = "".join([chr(datas[i]) for i in range(6, 8)])
+                        elif datas[4+datas[2]] != 2:
+                            self._string_length = datas[6]
+                    else:
+                        self._buffer.extend(datas[1:8])
+                        self._pgn2 = "Information"
+                        self._valeurChoisie2 = "".join([chr(datas[i]) for i in range(1, 8)])
+
+                    if len(self._buffer) >= self._string_length - 2:
+                        # -2 car longueur inclut length + type
+                        texte = "".join(chr(b) for b in self._buffer[:self._string_length - 2])
+                        self._definition  = texte
+                        self._buffer = []
+
 
                 case 127258:
                     self._valeurChoisie1 = "{:.2f}".format((datas[5] << 8 | datas[4]) * 0.0001 * 180 / math.pi)

@@ -1858,8 +1858,10 @@ if __name__ == "__main__":
 
         # Création de la fenêtre principale
         window = MainWindow()
-        handler = MyHandler(window.can_interface_app._can_interface)
         window.show()
+
+        # Création de l'objet CAN'
+        handler = MyHandler(window.can_interface_app._can_interface)
 
         # Intégration asyncio avec PyQt5
         loop = qasync.QEventLoop(app)
