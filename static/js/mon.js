@@ -618,13 +618,28 @@ const updateAISMarker = (ship) => {
     }
 
     function getShipColor(mmsi, classe) {
-      if (mmsi.length === 8) return '#FFD700'; // jaune
-      if (mmsi.length === 10) return '#9E9E9E'; // gris
-      if (mmsi.length === 9) {
-        return classe === 'A' ? '#0000FF' : '#FF0000'; // bleu ou orange
-      }
-      return '#000000'; // couleur par défaut si aucune condition ne correspond
-    }
+  const first = mmsi.toString()[0]; // premier chiffre du MMSI
+
+  // MMSI commençant par 8 → priorité : vert
+  if (first === '8') return '#00FF00'; // vert
+
+  // MMSI commençant par 0
+  if (first === '0') return '#FFD700'; // jaune
+
+  // MMSI commençant par 1
+  if (first === '1') return '#9E9E9E'; // gris
+
+  // MMSI commençant par 9
+  if (first === '9') return '#000000'; // noir
+
+  // MMSI commençant par 2 à 7
+  if (['2','3','4','5','6','7'].includes(first)) {
+    return classe === 'A' ? '#0000FF' : '#FF0000'; // bleu (A) ou rouge (B)
+  }
+
+  // Par défaut
+  return '#000000';
+}
 
 
     function getShipShape(mmsi) {
