@@ -11,7 +11,7 @@ from Package.MMSI import *
 class NMEA2000:
     ADRESSES_NOEUD = list(range(253))
     nbr = 0
-    coor = 0
+    coord = 0
     cog_sog = 0
     windTrue = 0
     windApp = 0
@@ -314,21 +314,21 @@ class NMEA2000:
                     self._pgn2 = "Longitude"
 
                     # Pour Analyse.
-                    self._analyse3 = "Coor " + self._pgn1
-                    self._analyse2 = "Coor " + self._pgn1
-                    self._analyse1 = "Coor " + self._pgn1
-                    self._analyse0 = "Coor " + self._pgn1
-                    self._analyse7 = "Coor " + self._pgn2
-                    self._analyse6 = "Coor " + self._pgn2
-                    self._analyse5 = "Coor " + self._pgn2
-                    self._analyse4 = "Coor " + self._pgn2
+                    self._analyse3 = "Coord " + self._pgn1
+                    self._analyse2 = "Coord " + self._pgn1
+                    self._analyse1 = "Coord " + self._pgn1
+                    self._analyse0 = "Coord " + self._pgn1
+                    self._analyse7 = "Coord " + self._pgn2
+                    self._analyse6 = "Coord " + self._pgn2
+                    self._analyse5 = "Coord " + self._pgn2
+                    self._analyse4 = "Coord " + self._pgn2
 
                     self._latitudeMoi = self._valeurChoisie1
                     self._longitudeMoi = self._valeurChoisie2
                     # Mise à jour des coordonnées sur la carte environ toutes les secondes (1/10 scrutations).
 
                     # Toutes les 10 mesures (~1s)
-                    if NMEA2000.coor % 10 == 0:
+                    if NMEA2000.coord % 10 == 0:
                         try:
                             if None not in (self._latitudeMoi, self._longitudeMoi, self._cogMoi, self._sogMoi):
                                 asyncio.create_task(
@@ -343,7 +343,7 @@ class NMEA2000:
                             print(f"Erreur lors de la création de la tâche asynchrone : {e}")
 
                     # Incrémenter le compteur
-                    NMEA2000.coor += 1
+                    NMEA2000.coord += 1
 
                 case 130306:
                     # Conversion des données
@@ -1108,7 +1108,8 @@ class NMEA2000:
 
                         temp = (datas[7] << 16 | datas[6] << 8 | datas[5])
                         if not (temp < 59392 or temp > 130944 or datas[7] & 0xEF == 0xEF):
-                            self._valeurChoisieTab = "Num PGN: " + str(temp)
+                            self._valeurChoisieTab = "Num PGN:"
+                            self._definition = str(temp)
 
                     elif (z + 1) % 3 == 0:
                         temp = (datas[3] << 16 | datas[2] << 8 | datas[1])
@@ -1186,7 +1187,6 @@ class NMEA2000:
 
                     elif z in [1, 2, 3, 4]:
                         self._pgn2 = "Modèle"
-                        # if datas[1] & 0xEF != 0xEF:
                         # Concatène tous les caractères utiles (ignore 0xFF et 0x00) sans conditionner à un octet précis
                         chunk_chars = []
                         for i in range(1, 8):
@@ -1259,19 +1259,27 @@ class NMEA2000:
 
                     if z == 0:
                         self._buffer = []
-                        self._pgn2 = "Configuration"
                         if datas[2] != 2:
-                            self._pgn2 = "Description"
+                            self._pgn2 = "Description#1"
+                            self._string_length = datas[2]
                             self._valeurChoisie2 = "".join([chr(datas[i]) for i in range(4, 8)])
                         elif datas[2+datas[2]] != 2:
-                            self._pgn2 = "Description"
+                            self._pgn2 = "Description#2"
+                            self._string_length = datas[2+datas[2]]
                             self._valeurChoisie2 = "".join([chr(datas[i]) for i in range(6, 8)])
                         elif datas[4+datas[2]] != 2:
                             self._string_length = datas[6]
+                            self._pgn2 = "Fabricant"
                     else:
                         self._buffer.extend(datas[1:8])
-                        self._pgn2 = "Information"
-                        self._valeurChoisie2 = "".join([chr(datas[i]) for i in range(1, 8)])
+                        self._pgn2 = "Fabricant"
+                        # on s'arrête quand on rencontre '0xFF'
+                        result = []
+                        for b in datas[1:8]:
+                            if b == 0xFF:
+                                break
+                            result.append(chr(b))
+                        self._valeurChoisie2 = "".join(result)
 
                     if len(self._buffer) >= self._string_length - 2:
                         # -2 car longueur inclut length + type
@@ -1395,11 +1403,10 @@ class NMEA2000:
 def true_wind(VA, AWA, SOG, COG, HDG=None, boat_vector_use_hdg=False):
     """
     Calcule le vent réel (sur le fond) à partir du vent apparent.
-    - VA: vitesse du vent apparent (nds).
-    - AWA: angle du vent apparent en degrés, relatif à l'étrave (0..360).
-    - SOG: vitesse du bateau (nds). Si boat_vector_use_hdg=True, interprété comme STW ; sinon SOG.
-    - COG: cap fond (degrés 0..360)
-    - HDG: cap compas/route du bateau (degrés 0..360). Si fourni, on l'utilise
+    - VA : vitesse du vent apparent (nds).
+    - AWA : angle du vent apparent en degrés, relatif à l'étrave (0..360).
+    - SOG : vitesse du bateau (nds). Si boat_vector_use_hdg=True, interprété comme STW ; sinon SOG.
+    - COG : cap fond (degrés 0..360). HDG : cap compas/route du bateau (degrés 0..360). Si fourni, on l'utilise
             pour référencer l'angle du vent apparent au repère Terre.
     - boat_vector_use_hdg: si True et HDG fourni, le vecteur vitesse du bateau
             est orienté selon HDG (cas STW). Sinon, il est orienté selon COG (cas SOG).

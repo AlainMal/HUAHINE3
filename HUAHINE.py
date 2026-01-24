@@ -676,13 +676,13 @@ class MainWindow(QMainWindow):
                             str(destination),
                             str(priorite),
                             str(result[0]),  # PGN1, Ces résultats viennent du tuple NMEA 2000.
-                            str(result[3]),  # Valeur1
-                            str(result[1]),  # PGN2
-                            str(result[4]),  # Valeur2
-                            str(result[2]),  # PGN3
-                            str(result[5]),  # Valeur3
-                            str(result[6]),  # Table
-                            str(result[7])   # Définition de la table.
+                            str(result[3] if result[3] is not None else ""),  # Valeur1
+                            str(result[1] if result[1] is not None else ""),  # PGN2
+                            str(result[4] if result[4] is not None else ""),  # Valeur2
+                            str(result[2] if result[2] is not None else ""),  # PGN3
+                            str(result[5] if result[5] is not None else ""),  # Valeur3
+                            str(result[6] if result[6] is not None else ""),  # Table
+                            str(result[7] if result[7] is not None else "")  # Définition de la table.
                         ))
 
                     except ValueError as ve:
