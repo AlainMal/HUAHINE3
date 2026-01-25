@@ -643,14 +643,16 @@ const updateAISMarker = (ship) => {
 
 
     function getShipShape(mmsi) {
-      if (mmsi.length === 8) {
-        return (color) => `<rect x="30" y="30" width="40" height="40" fill="${color}" stroke="white" stroke-width="2"/>`;
-      }
-      if (mmsi.length === 10) {
-        return (color) => `<polygon points="50,20 80,50 50,80 20,50" fill="${color}" stroke="white" stroke-width="2"/>`;
-      }
-      return (color) => `<path fill="${color}" stroke="white" stroke-width="2"
-                         d="M50,10 L80,80 L50,65 L20,80 Z"/>`;
+        const first = mmsi.toString()[0];
+         if (['2','3','4','5','6','7'].includes(first)) {
+            return (color) => `<path fill="${color}" stroke="white" stroke-width="2"
+                             d="M50,10 L80,80 L50,65 L20,80 Z"/>`;
+          }
+          if (first === '0') {
+            return (color) => `<polygon points="50,20 80,50 50,80 20,50" fill="${color}" stroke="white" stroke-width="2"/>`;
+          }
+          return (color) => `<path fill="${color}" stroke="white" stroke-width="2"
+                             d="M50,10 L80,80 L50,65 L20,80 Z"/>`;
     }
 
     function getShipTooltip(ship) {
