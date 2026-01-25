@@ -1274,7 +1274,7 @@ class NMEA2000:
                             prev_len = 0
                             self._cfg_payload.extend(datas[2:8])
                         else:
-                            # Trames suivantes: on ajoute 7 octets de données
+                            # Trames suivantes : on ajoute 7 octets de données
                             if not hasattr(self, "_cfg_payload"):
                                 self._cfg_payload = bytearray()
                             prev_len = len(self._cfg_payload)
@@ -1317,7 +1317,7 @@ class NMEA2000:
                                 L = payload[p]
                                 # Champ vide ou pas encore disponible
                                 if L in (0x00, 0xFF):
-                                    # Champ vide: avancer d'1 pour éviter boucle, mais on arrête si rien d'autre
+                                    # Champ vide : avancer d'1 pour éviter boucle, mais on arrête si rien d'autre
                                     # Par sécurité, on stoppe ici (rare en pratique)
                                     break
                                 # Pour avoir tout le champ, il faut L octets à partir de p
@@ -1377,19 +1377,19 @@ class NMEA2000:
                                 self._pgn2 = chunk_name
                                 self._valeurChoisie2 = "".join(piece_chars)
                             else:
-                                # Si aucun octet de données (ex: que Length/Type), publier chaîne vide
+                                # Si aucun octet de données (ex : que Length/Type), publier chaîne vide
                                 # en gardant _pgn2 inchangé pour ne pas polluer l'UI
                                 self._valeurChoisie2 = ""
 
                             # 2) Mettre à jour l'état d'avancement des champs sans écraser _valeurChoisie2
                             parsed_now = _try_parse_fields(payload, total_len)
                             if len(parsed_now) > getattr(self, "_cfg_parsed_count", 0):
-                                # Juste mettre à jour le compteur; ne pas publier le champ complet ici
+                                # Juste mettre à jour le compteur ; ne pas publier le champ complet ici
                                 self._cfg_parsed_count = len(parsed_now)
 
                             # 3) Quand tout est reçu (ou dépassé), on peut aussi placer un résumé dans _definition
                             if len(payload) >= total_len:
-                                # Option: remplir _definition avec un résumé propre (sans padding)
+                                # Option : remplir _definition avec un résumé propre (sans padding)
                                 try:
                                     desc = []
                                     names = ["Description#1", "Description#2", "Code Fabricant"]
