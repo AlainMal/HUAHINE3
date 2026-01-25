@@ -1392,7 +1392,7 @@ class NMEA2000:
                                 # Option : remplir _definition avec un résumé propre (sans padding)
                                 try:
                                     desc = []
-                                    names = ["Description #1", "Description #2", "Code Fabricant"]
+                                    # names = ["Description #1", "Description #2", "Code Fabricant"]
                                     p = 0
                                     for i in range(3):
                                         if p >= total_len or len(payload) < p + 1:
