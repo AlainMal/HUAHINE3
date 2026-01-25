@@ -1286,7 +1286,7 @@ class NMEA2000:
                             # data_end_partiel peut être inférieur à la fin théorique du champ si la charge utile
                             # n'est pas encore totalement reçue. Cela permet de publier la portion déjà reçue
                             # pour chaque trame, même si le champ n'est pas complet.
-                            names = ["Description#1", "Description#2", "Code Fabricant"]
+                            names = ["Description #1", "Description #2", "Code Fabricant"]
                             ranges = []
                             p = 0
                             i = 0
@@ -1305,7 +1305,7 @@ class NMEA2000:
                             return ranges
 
                         def _try_parse_fields(payload: bytearray, total_len: int):
-                            names = ["Description#1", "Description#2", "Code Fabricant"]
+                            names = ["Description #1", "Description #2", "Code Fabricant"]
                             parsed = []
                             p = 0
                             i = 0
@@ -1392,7 +1392,7 @@ class NMEA2000:
                                 # Option : remplir _definition avec un résumé propre (sans padding)
                                 try:
                                     desc = []
-                                    names = ["Description#1", "Description#2", "Code Fabricant"]
+                                    names = ["Description #1", "Description #2", "Code Fabricant"]
                                     p = 0
                                     for i in range(3):
                                         if p >= total_len or len(payload) < p + 1:
