@@ -1071,6 +1071,7 @@ class NMEA2000:
                     if z == 0:
                         self._valeurChoisie2 = (datas[3] << 8 | datas[2]) & 0x7FF
                         self._pgn2 = "Code propriétaire"
+                        self._definition = MANUFACTURE[self._valeurChoisie2]
 
                 case 127245:
                     if datas[0] != 0xFF:
@@ -1151,7 +1152,7 @@ class NMEA2000:
                     if z == 1:
                         self._pgn2 = "Distance totale parcourue"
                         if datas[6] & 0xEF != 0xEF:
-                            self._valeurChoisie2 = (datas[4] << 24 | datas[3] << 16 | datas[2] << 8 | datas[1])
+                            self._valeurChoisie2 = (datas[4] << 24 | datas[3] << 16 | datas[2] << 8 | datas[1])/1852
 
                 case 129540:
                     z = (datas[0] & 0x1F)
@@ -1317,10 +1318,9 @@ class NMEA2000:
                                 L = payload[p]
                                 # Champ vide ou pas encore disponible
                                 if L in (0x00, 0xFF):
-                                    # Champ vide : avancer d'1 pour éviter boucle, mais on arrête si rien d'autre
-                                    # Par sécurité, on stoppe ici (rare en pratique)
+                                    # Par sécurité, on stoppe ici (rare en pratique).
                                     break
-                                # Pour avoir tout le champ, il faut L octets à partir de p
+                                # Pour avoir tout le champ, il faut L octets à partir de p.
                                 if len(payload) < p + L:
                                     break
                                 # Au moins Length + Type présents
@@ -1473,7 +1473,8 @@ class NMEA2000:
                 case 60928:
                     self._pgn1 = "Réponse Adresse revendiquée"
                     self._pgn2 = "Code fabriquant"
-                    self._valeurChoisie2 = (datas[3] & 0x7) <<8 | datas[2]
+                    self._valeurChoisie2 = ((datas[2] >> 5) & 0x07) | (datas[3] << 3)
+                    self._definition = MANUFACTURE[self._valeurChoisie2]
 
                 case _:
                     self._pgn1 = "<PGN inconnu sur cette version>"
