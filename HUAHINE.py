@@ -160,7 +160,7 @@ class MainWindow(QMainWindow):
         self._can_interface = CANDll(self._stop_flag, self._nmea_2000)
 
         # Met la case à cocher invisible, car elle ne se comporte pas correctement.
-        self.check_buffer.setVisible(False)
+        self.check_buffer= None
 
         # Instanciez CANApplication en lui passant les paramètres nécessaires
         self.can_interface_app = CANApplication(

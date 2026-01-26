@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>740</width>
-    <height>705</height>
+    <width>774</width>
+    <height>699</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -45,77 +45,7 @@
     <property name="bottomMargin">
      <number>20</number>
     </property>
-    <item row="2" column="0" colspan="2">
-     <widget class="QLabel" name="lab_octet">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="autoFillBackground">
-       <bool>false</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(254, 255, 221);</string>
-      </property>
-      <property name="lineWidth">
-       <number>1</number>
-      </property>
-      <property name="text">
-       <string>                            Numéro de ligne
- PGN                 Priorité   Source    Destination
-
- Vient des datas :
- Significations
- Valeurs
- Table</string>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="3" rowspan="6" colspan="2">
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QWidget" name="widget_2" native="true">
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Table d'affichage des données reçues du bus CAN.</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QTableView" name="table_can">
-           <property name="minimumSize">
-            <size>
-             <width>310</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(85, 255, 255);</string>
-           </property>
-           <attribute name="horizontalHeaderMinimumSectionSize">
-            <number>24</number>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>30</number>
-           </attribute>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="5" column="0" colspan="2">
+    <item row="4" column="0" colspan="2">
      <widget class="QWidget" name="widget" native="true">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 127);</string>
@@ -189,6 +119,70 @@
        </property>
        <property name="text">
         <string>Nombre de trame dans la table et sur NMEA 2000</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QWidget" name="widget_4" native="true">
+      <widget class="QLabel" name="lab_connection">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>316</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(255, 85, 0);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lab_octet">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>347</width>
+         <height>112</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(254, 255, 221);</string>
+       </property>
+       <property name="lineWidth">
+        <number>1</number>
+       </property>
+       <property name="text">
+        <string>                            Numéro de ligne
+ PGN                 Priorité   Source    Destination
+
+ Vient des datas :
+ Significations
+ Valeurs
+ Table</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </widget>
@@ -269,7 +263,46 @@
       </widget>
      </widget>
     </item>
-    <item row="3" column="0" rowspan="2" colspan="2">
+    <item row="0" column="3" rowspan="5" colspan="2">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QWidget" name="widget_2" native="true">
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Table d'affichage des données reçues du bus CAN.</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QTableView" name="table_can">
+           <property name="minimumSize">
+            <size>
+             <width>310</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(85, 255, 255);</string>
+           </property>
+           <attribute name="horizontalHeaderMinimumSectionSize">
+            <number>24</number>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderDefaultSectionSize">
+            <number>30</number>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0" rowspan="2" colspan="2">
      <widget class="QWidget" name="widget_3" native="true">
       <widget class="QLabel" name="label_5">
        <property name="geometry">
@@ -303,7 +336,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resouce.qrc">:/images/images/VoilierImage.png</pixmap>
+        <pixmap resource="../ALAIN/HUAHINE/resouce.qrc">:/images/images/VoilierImage.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -322,7 +355,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resouce.qrc">:/images/images/Spi.png</pixmap>
+        <pixmap resource="../ALAIN/HUAHINE/resouce.qrc">:/images/images/Spi.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -341,7 +374,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resouce.qrc">:/images/images/Image3.png</pixmap>
+        <pixmap resource="../ALAIN/HUAHINE/resouce.qrc">:/images/images/Image3.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -360,7 +393,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resouce.qrc">:/images/images/regate.jpg</pixmap>
+        <pixmap resource="../ALAIN/HUAHINE/resouce.qrc">:/images/images/regate.jpg</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -373,58 +406,6 @@
       <zorder>label_6</zorder>
      </widget>
     </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QWidget" name="widget_4" native="true">
-      <widget class="QCheckBox" name="check_buffer">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>330</x>
-         <y>45</y>
-         <width>16</width>
-         <height>36</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="checkable">
-        <bool>false</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lab_connection">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>0</y>
-         <width>316</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(255, 85, 0);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -432,7 +413,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>740</width>
+     <width>774</width>
      <height>26</height>
     </rect>
    </property>
@@ -511,7 +492,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/Quitter.png</normaloff>:/icones/icones/Quitter.png</iconset>
    </property>
    <property name="text">
@@ -526,7 +507,7 @@
   </action>
   <action name="actionImporter">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/Table.ico</normaloff>:/icones/icones/Table.ico</iconset>
    </property>
    <property name="text">
@@ -541,7 +522,7 @@
   </action>
   <action name="actionVoir">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/Reading.png</normaloff>:/icones/icones/Reading.png</iconset>
    </property>
    <property name="text">
@@ -556,7 +537,7 @@
   </action>
   <action name="actionOuvrir">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/Ouvir.gif</normaloff>:/icones/icones/Ouvir.gif</iconset>
    </property>
    <property name="text">
@@ -571,7 +552,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/OpenMal.gif</normaloff>:/icones/icones/OpenMal.gif</iconset>
    </property>
    <property name="text">
@@ -586,7 +567,7 @@
   </action>
   <action name="actionClose">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/CloseMal.gif</normaloff>:/icones/icones/CloseMal.gif</iconset>
    </property>
    <property name="text">
@@ -601,7 +582,7 @@
   </action>
   <action name="actionRead">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/Talk.gif</normaloff>:/icones/icones/Talk.gif</iconset>
    </property>
    <property name="text">
@@ -616,7 +597,7 @@
   </action>
   <action name="actionStatus">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/Status.png</normaloff>:/icones/icones/Status.png</iconset>
    </property>
    <property name="text">
@@ -631,7 +612,7 @@
   </action>
   <action name="actionStop">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/STOP.gif</normaloff>:/icones/icones/STOP.gif</iconset>
    </property>
    <property name="text">
@@ -646,7 +627,7 @@
   </action>
   <action name="actionAbout">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/VoilierImage.png</normaloff>:/icones/icones/VoilierImage.png</iconset>
    </property>
    <property name="text">
@@ -658,7 +639,7 @@
   </action>
   <action name="actionExport">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/csv.png</normaloff>:/icones/icones/csv.png</iconset>
    </property>
    <property name="text">
@@ -673,7 +654,7 @@
   </action>
   <action name="actionMap">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/VoilierImage.png</normaloff>:/icones/icones/VoilierImage.png</iconset>
    </property>
    <property name="text">
@@ -685,7 +666,7 @@
   </action>
   <action name="actionAide">
    <property name="icon">
-    <iconset resource="resouce.qrc">
+    <iconset resource="../ALAIN/HUAHINE/resouce.qrc">
      <normaloff>:/icones/icones/aides.png</normaloff>:/icones/icones/aides.png</iconset>
    </property>
    <property name="text">
@@ -697,7 +678,7 @@
   </action>
  </widget>
  <resources>
-  <include location="resouce.qrc"/>
+  <include location="../ALAIN/HUAHINE/resouce.qrc"/>
  </resources>
  <connections/>
 </ui>
