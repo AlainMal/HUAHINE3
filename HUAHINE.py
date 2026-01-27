@@ -1741,9 +1741,7 @@ async def get_status():
         return jsonify({'active': False, 'error': str(e)}), 500
 
 # Fenêtre des listes des participants ----------------------------------------------------------------------------------
-configuration = {
-
-}
+configuration = {}
 
 @quart_app.route('/api/configuration')
 async def get_configuration():
@@ -1769,6 +1767,7 @@ async def trigger_send():
     result = await handler.send()
     return jsonify(result)
 # =============================================== FIN DE QUART =========================================================
+
 def bring_to_front(window_title):
 
     def enum_handler(hwnd, _):
@@ -1800,8 +1799,6 @@ def bring_to_front(window_title):
     win32gui.EnumWindows(enum_handler, None)
 
 
-
-
 @quart_app.get("/focus-huahine")
 async def focus_huahine():
     bring_to_front("CAN bus et NMEA 2000 en temps réel")  # Titre exact de ta fenêtre PyQt
@@ -1828,7 +1825,7 @@ async def cleanup(window):
     sys.exit(0)
 # ********************************************* LANCE L'APPLICATION ****************************************************
 if __name__ == "__main__":
-    # Rediriger les print vers un fichier de log SEULEMENT pour l'exe
+    # Rediriger les print vers un fichier de log SEULEMENT pour l'exe.
     if getattr(sys, 'frozen', False):
         # On est dans l'exe PyInstaller
         log_file = open('huahine_debug.log', 'w', encoding='utf-8')

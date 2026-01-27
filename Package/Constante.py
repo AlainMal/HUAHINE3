@@ -133,7 +133,6 @@ ENERGIE_DC ={
 4:	"Eolienne"
 }
 
-# A compléter...
 MANUFACTURE ={
 69:	"ARKS Enterprises, Inc.",
 78:	"FW Murphy/Enovation Controls",
@@ -422,3 +421,5 @@ MANUFACTURE ={
 1862:	"Yamaha Marine",
 1863:	"Faria Instruments"
 }
+
+# A compléter...

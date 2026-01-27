@@ -1281,7 +1281,7 @@ class NMEA2000:
                             prev_len = len(self._cfg_payload)
                             self._cfg_payload.extend(datas[1:8])
 
-                        # Fonctions internes
+                        # Fonctions internes ---------------------------------------------------------------------------
                         def _find_field_ranges(payload: bytearray, total_len: int):
                             # Retourne une liste de tuples (idx, name, data_start, data_end_partiel)
                             # data_end_partiel peut être inférieur à la fin théorique du champ si la charge utile
@@ -1348,6 +1348,7 @@ class NMEA2000:
 
                             # Retourne la liste des champs décodés complètement à ce stade
                             return parsed
+                        # ----------------------------------------------------------------------------------------------
 
                         # Tente l'analyse avec ce que l'on a reçu jusqu'ici
                         total_len = getattr(self, "_cfg_total", 0)
@@ -1410,7 +1411,7 @@ class NMEA2000:
                                         desc.append(f"{txt}")
                                         p += L
                                     if desc:
-                                        self._definition = " ".join(desc)
+                                        self._definition = "".join(desc)
                                 except Exception:
                                     pass
                                 # Nettoyage de l'état pour la prochaine séquence
