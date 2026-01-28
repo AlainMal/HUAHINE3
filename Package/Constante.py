@@ -134,11 +134,11 @@ ENERGIE_DC ={
 }
 
 MANUFACTURE ={
-69:	"ARKS Enterprises, Inc.",
-78:	"FW Murphy/Enovation Controls",
-80:	"Twin Disc",
-85:	"Kohler Power Systems",
-88:	"Hemisphere GPS Inc",
+69:	    "ARKS Enterprises, Inc.",
+78:	    "FW Murphy/Enovation Controls",
+80:	    "Twin Disc",
+85:	    "Kohler Power Systems",
+88:	    "Hemisphere GPS Inc",
 116:	"BEP Marine",
 135:	"Airmar",
 137:	"Maretron",
@@ -295,7 +295,7 @@ MANUFACTURE ={
 847:	"Oceanvolt",
 862:	"Prospec",
 868:	"Data Panel Corp",
-890:   "L3 Technologies",
+890:    "L3 Technologies",
 894:	"Rhodan Marine Systems",
 896:	"Nexfour Solutions",
 905:    "ASA Electronics",
