@@ -1254,10 +1254,10 @@ class NMEA2000:
 
 
                 case 126998:
-                    # Configuration Information (PGN 126998)
-                    # Contient 3 champs chaîne: Description#1, Description#2, Fabricant
-                    # Chaque champ "String Field" commence par: [Length][Type][data...],
-                    # où Length inclut les 2 octets (length + type). Les données sont remplies par 0xFF.
+                    # Configuration Information (PGN 126998) - Fast Packet
+                    # z = numéro de trame (datas[0] & 0x1F)
+                    # Première trame : datas[2] = nombre d'octets, datas[3] = mode (0 ou 1)
+                    # Trames suivantes : datas[0] = z, données commencent à datas[1]
                     z = (datas[0] & 0x1F)
                     self._valeurChoisie1 = "N° " + str(z)
                     self._pgn1 = "Info Configuration"
@@ -1267,160 +1267,52 @@ class NMEA2000:
                         if z == 0:
                             # Tampon pour reconstituer toutes les données du PGN
                             self._cfg_payload = bytearray()
-                            # Octet [1] = taille totale utile du PGN (hors en-tête fast-packet)
-                            self._cfg_total = datas[1]
-                            # Compte de champs entièrement décodés (0..3)
-                            self._cfg_parsed_count = 0
-                            # Ajouter la charge utile initiale (dès l'octet 2)
-                            prev_len = 0
-                            self._cfg_payload.extend(datas[2:8])
+                            # Octet [2] = nombre d'octets de la première chaîne
+                            self._cfg_total = datas[2]
+                            # Octet [3] = mode de la première chaîne (0 ou 1)
+                            self._cfg_mode = datas[3]
+                            # Ajouter la charge utile initiale (dès l'octet 4)
+                            self._cfg_payload.extend(datas[4:8])
+                            # Publier les informations de la première trame
+                            self._pgn2 = "Taille"
+                            self._valeurChoisie2 = str(self._cfg_total)
+                            self._pgn3 = "Mode"
+                            self._valeurChoisie3 = str(self._cfg_mode)
                         else:
-                            # Trames suivantes : on ajoute 7 octets de données
+                            # Trames suivantes : on ajoute 7 octets de données (à partir de datas[1])
                             if not hasattr(self, "_cfg_payload"):
                                 self._cfg_payload = bytearray()
-                            prev_len = len(self._cfg_payload)
-                            self._cfg_payload.extend(datas[1:8])
+                            # Extraire la portion de chaîne reçue dans cette trame
+                            portion = datas[1:8]
+                            self._cfg_payload.extend(portion)
 
-                        # Fonctions internes ---------------------------------------------------------------------------
-                        def _find_field_ranges(payload: bytearray, total_len: int):
-                            # Retourne une liste de tuples (idx, name, data_start, data_end_partiel)
-                            # data_end_partiel peut être inférieur à la fin théorique du champ si la charge utile
-                            # n'est pas encore totalement reçue. Cela permet de publier la portion déjà reçue
-                            # pour chaque trame, même si le champ n'est pas complet.
-                            names = ["Description #1", "Description #2", "Code Fabricant"]
-                            ranges = []
-                            p = 0
-                            i = 0
-                            while i < 3 and p < total_len and p < len(payload):
-                                L = payload[p]
-                                if L in (0x00, 0xFF) or L < 2:
+                            # Convertir la portion en chaîne (jusqu'à 0xFF)
+                            portion_chars = []
+                            for b in portion:
+                                if b in (0xFF, 0x00):
                                     break
-                                data_start = p + 2
-                                data_end_theoretical = p + L
-                                # Limiter à ce qui est effectivement présent et à la longueur totale déclarée
-                                data_end = min(data_end_theoretical, len(payload), total_len)
-                                ranges.append((i, names[i], data_start, data_end))
-                                # Avancer p selon L pour estimer le début du champ suivant, même si incomplet
-                                p += L
-                                i += 1
-                            return ranges
+                                portion_chars.append(chr(b))
 
-                        def _try_parse_fields(payload: bytearray, total_len: int):
-                            names = ["Description #1", "Description #2", "Code Fabricant"]
-                            parsed = []
-                            p = 0
-                            i = 0
-                            # Parcours séquentiel des champs tant que possible
-                            while i < 3 and p < total_len:
-                                # Besoin au moins de l'octet Length
-                                if len(payload) < p + 1:
-                                    break
-                                L = payload[p]
-                                # Champ vide ou pas encore disponible
-                                if L in (0x00, 0xFF):
-                                    # Par sécurité, on stoppe ici (rare en pratique).
-                                    break
-                                # Pour avoir tout le champ, il faut L octets à partir de p.
-                                if len(payload) < p + L:
-                                    break
-                                # Au moins Length + Type présents
-                                if L < 2:
-                                    # Longueur invalide, on sort
-                                    break
-                                # Données du champ
-                                data_start = p + 2
-                                data_end = p + L
-                                raw = payload[data_start:data_end]
-                                # Couper à 0xFF (padding)
-                                value_bytes = []
-                                for b in raw:
-                                    if b == 0xFF:
+                            # Publier la portion reçue dans cette trame
+                            self._pgn2 = f"Portion (z={z})"
+                            self._valeurChoisie2 = "".join(portion_chars)
+
+                            # Si on a reçu suffisamment de données, assembler la chaîne complète
+                            if hasattr(self, "_cfg_total") and len(self._cfg_payload) >= self._cfg_total:
+                                # Assembler la chaîne complète
+                                full_chars = []
+                                for b in self._cfg_payload[:self._cfg_total]:
+                                    if b in (0xFF, 0x00):
                                         break
-                                    value_bytes.append(b)
-                                try:
-                                    value = "".join(chr(b) for b in value_bytes)
-                                except Exception:
-                                    value = ""
-                                parsed.append((i, names[i], value))
-                                # Prochain champ
-                                p += L
-                                i += 1
+                                    full_chars.append(chr(b))
+                                self._definition = "".join(full_chars)
 
-                            # Retourne la liste des champs décodés complètement à ce stade
-                            return parsed
-                        # ----------------------------------------------------------------------------------------------
-
-                        # Tente l'analyse avec ce que l'on a reçu jusqu'ici
-                        total_len = getattr(self, "_cfg_total", 0)
-                        payload = getattr(self, "_cfg_payload", bytearray())
-                        if total_len:
-                            # 1) Publier UNIQUEMENT la partie reçue dans CETTE trame
-                            new_start = prev_len
-                            new_end = min(len(payload), total_len if total_len else len(payload))
-                            chunk_name = None
-                            chunk_bytes = None
-                            ranges = _find_field_ranges(payload, total_len)
-                            for idx, name, s, e in ranges:
-                                # Intersection avec la nouvelle fenêtre
-                                a = max(new_start, s)
-                                b = min(new_end, e)
-                                if b > a:
-                                    chunk_name = name
-                                    chunk_bytes = payload[a:b]
-                                    # continuer pour privilégier le champ de plus haut indice si chevauchement multiple
-                            # Convertir et publier le morceau de cette trame
-                            if chunk_bytes is not None:
-                                piece_chars = []
-                                for bb in chunk_bytes:
-                                    if bb in (0xFF, 0x00):
-                                        break
-                                    piece_chars.append(chr(bb))
-                                self._pgn2 = chunk_name
-                                self._valeurChoisie2 = "".join(piece_chars)
-                            else:
-                                # Si aucun octet de données (ex : que Length/Type), publier chaîne vide
-                                # en gardant _pgn2 inchangé pour ne pas polluer l'UI
-                                self._valeurChoisie2 = ""
-
-                            # 2) Mettre à jour l'état d'avancement des champs sans écraser _valeurChoisie2
-                            parsed_now = _try_parse_fields(payload, total_len)
-                            if len(parsed_now) > getattr(self, "_cfg_parsed_count", 0):
-                                # Juste mettre à jour le compteur ; ne pas publier le champ complet ici
-                                self._cfg_parsed_count = len(parsed_now)
-
-                            # 3) Quand tout est reçu (ou dépassé), on peut aussi placer un résumé dans _definition
-                            if len(payload) >= total_len:
-                                # Option : remplir _definition avec un résumé propre (sans padding)
-                                try:
-                                    desc = []
-                                    # names = ["Description #1", "Description #2", "Code Fabricant"]
-                                    p = 0
-                                    for i in range(3):
-                                        if p >= total_len or len(payload) < p + 1:
-                                            break
-                                        L = payload[p]
-                                        if L < 2 or len(payload) < p + L:
-                                            break
-                                        raw = payload[p+2:p+L]
-                                        vb = []
-                                        for b in raw:
-                                            if b == 0xFF:
-                                                break
-                                            vb.append(b)
-                                        txt = "".join(chr(b) for b in vb)
-                                        desc.append(f"{txt}")
-                                        p += L
-                                    if desc:
-                                        self._definition = "".join(desc)
-                                except Exception:
-                                    pass
                                 # Nettoyage de l'état pour la prochaine séquence
                                 self._cfg_payload = bytearray()
                                 self._cfg_total = 0
-                                self._cfg_parsed_count = 0
+                                self._cfg_mode = None
                     except Exception as e:
                         # Ne jamais casser le flux si un périphérique envoie un format exotique
-                        # On journalise minimalement en console
                         print(f"Erreur décodage PGN 126998: {e}")
 
 
