@@ -1297,12 +1297,24 @@ class NMEA2000:
                             portion = datas[1:8]
                             self._cfg_payload.extend(portion)
 
-                            # Convertir la portion en chaîne (jusqu'à 0xFF)
+                            # Convertir la portion en chaîne
+                            # Ne s'arrêter sur 0xFF/0x00 que si on dépasse la longueur attendue
                             portion_chars = []
+                            bytes_needed = self._cfg_total if hasattr(self, "_cfg_total") else 0
+                            current_pos = len(self._cfg_payload) - len(portion)
+
                             for b in portion:
-                                if b in (0xFF, 0x00):
-                                    break
-                                portion_chars.append(chr(b))
+                                if current_pos < bytes_needed:
+                                    # On est dans les données de la chaîne courante
+                                    if b not in (0xFF, 0x00):
+                                        portion_chars.append(chr(b))
+                                    current_pos += 1
+                                else:
+                                    # On a dépassé la longueur attendue, s'arrêter sur 0xFF/0x00
+                                    if b in (0xFF, 0x00):
+                                        break
+                                    portion_chars.append(chr(b))
+                                    current_pos += 1
 
                             # Publier la portion reçue dans cette trame
                             self._pgn2 = f"Portion (z={z})"
@@ -1310,18 +1322,38 @@ class NMEA2000:
 
                             # Si on a reçu suffisamment de données, assembler la chaîne complète
                             if hasattr(self, "_cfg_total") and len(self._cfg_payload) >= self._cfg_total:
-                                # Assembler la chaîne complète
+                                # Assembler la chaîne complète (exactement _cfg_total octets)
+                                # Filtrer les 0xFF et 0x00 pour la dernière chaîne
                                 full_chars = []
                                 for b in self._cfg_payload[:self._cfg_total]:
-                                    if b in (0xFF, 0x00):
-                                        break
-                                    full_chars.append(chr(b))
+                                    if b not in (0xFF, 0x00):
+                                        full_chars.append(chr(b))
                                 self._definition = "".join(full_chars)
 
-                                # Nettoyage de l'état pour la prochaine séquence
-                                self._cfg_payload = bytearray()
-                                self._cfg_total = 0
-                                self._cfg_mode = None
+                                # Vérifier s'il y a une chaîne suivante
+                                if len(self._cfg_payload) > self._cfg_total:
+                                    # L'octet suivant est la longueur de la chaîne suivante
+                                    next_idx = self._cfg_total
+                                    if next_idx < len(self._cfg_payload):
+                                        new_total = self._cfg_payload[next_idx]
+                                        # L'octet suivant est le mode
+                                        if next_idx + 1 < len(self._cfg_payload):
+                                            new_mode = self._cfg_payload[next_idx + 1]
+                                            # Garder les données restantes après longueur+mode
+                                            remaining = self._cfg_payload[next_idx + 2:]
+                                            self._cfg_payload = remaining
+                                            self._cfg_total = new_total
+                                            self._cfg_mode = new_mode
+                                        else:
+                                            # Pas encore le mode, on attend la prochaine trame
+                                            remaining = self._cfg_payload[next_idx + 1:]
+                                            self._cfg_payload = remaining
+                                            self._cfg_total = new_total
+                                else:
+                                    # Nettoyage de l'état pour la prochaine séquence
+                                    self._cfg_payload = bytearray()
+                                    self._cfg_total = 0
+                                    self._cfg_mode = None
                     except Exception as e:
                         # Ne jamais casser le flux si un périphérique envoie un format exotique
                         print(f"Erreur décodage PGN 126998: {e}")

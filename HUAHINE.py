@@ -616,8 +616,10 @@ class MainWindow(QMainWindow):
             resultat = (ligne.strip().split(" ") for ligne in lignes_restees if ligne.strip())
 
             # Ouvrir le fichier CSV pour écrire les résultats
+            #with open(self._file_path_csv, 'w', newline='', encoding='utf-8-sig') as f:
+             #   writer = csv.writer(f, delimiter=';')
             with open(self._file_path_csv, 'w', newline='', encoding='utf-8-sig') as f:
-                writer = csv.writer(f, delimiter=';')
+                writer = csv.writer(f, delimiter=';', quoting=csv.QUOTE_ALL)
 
                 # Écrire l'en-tête du fichier CSV
                 writer.writerow(("PGN", "Source","Destination", "Priorité","PGN1", "Valeur", "PGN2",
@@ -669,21 +671,32 @@ class MainWindow(QMainWindow):
                             print(f"Octets: {octets}")
                             print(f"Erreur détaillée: {ve}")
 
+                        def protect_excel(value):
+                            if value is None:
+                                return ""
+                            v = str(value)
+                            # Si la valeur ressemble à une formule potentielle
+                            if v.startswith("-") and "-" in v[1:]:
+                                return f'="{v}"'
+                            return v
+
                         # Écrire les résultats dans CSV sous forme d'un tuple.
+
                         writer.writerow((
-                            str(pgn),        # Affiche PGN, Source, Destination et Priorité.
+                            str(pgn),
                             str(source),
                             str(destination),
                             str(priorite),
-                            str(result[0]),  # PGN1, Ces résultats viennent du tuple NMEA 2000.
-                            str(result[3] if result[3] is not None else ""),  # Valeur1
-                            str(result[1] if result[1] is not None else ""),  # PGN2
-                            str(result[4] if result[4] is not None else ""),  # Valeur2
-                            str(result[2] if result[2] is not None else ""),  # PGN3
-                            str(result[5] if result[5] is not None else ""),  # Valeur3
-                            str(result[6] if result[6] is not None else ""),  # Table
-                            str(result[7] if result[7] is not None else "")  # Définition de la table.
+                            protect_excel(result[0]),
+                            protect_excel(result[3]),
+                            protect_excel(result[1]),
+                            protect_excel(result[4]),
+                            protect_excel(result[2]),
+                            protect_excel(result[5]),
+                            protect_excel(result[6]),
+                            protect_excel(result[7])
                         ))
+
 
                     except ValueError as ve:
                         print(f"Erreur de conversion à l'index {index} : {ligne}")
