@@ -1269,10 +1269,21 @@ class NMEA2000:
                             self._cfg_payload = bytearray()
                             # Octet [2] = nombre d'octets de la première chaîne
                             self._cfg_total = datas[2]
-                            # Octet [3] = mode de la première chaîne (0 ou 1)
                             self._cfg_mode = datas[3]
-                            # Ajouter la charge utile initiale (dès l'octet 4)
                             self._cfg_payload.extend(datas[4:8])
+                            if self._cfg_total == 2:
+                                self._cfg_total = datas[4]
+                                self._cfg_mode = datas[5]
+                                self._cfg_payload.extend(datas[6:8])
+                                if self._cfg_total == 2:
+                                    self._cfg_total = datas[6]
+                                    self._cfg_mode = datas[7]
+                                    self._cfg_payload = bytearray()
+
+                            # Octet [3] = mode de la première chaîne (0 ou 1)
+                            # self._cfg_mode = datas[7]
+                            # Ajouter la charge utile initiale (dès l'octet 4)
+                            # self._cfg_payload.extend(datas[4:8])
                             # Publier les informations de la première trame
                             self._pgn2 = "Taille"
                             self._valeurChoisie2 = str(self._cfg_total)
