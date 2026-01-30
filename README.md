@@ -238,8 +238,7 @@ Remarque : Si vous êtes branché à la place de la terminaison, il faut ajouter
         elle évolue en permanence. Je me suis fait aider des AI, pour le JavaScript, le Python et le CSS,
         certaine sont gratuites, mais les payantes sont excellentes. D'autre part je suis partie depuis le USBCAN dont
         j'ai traduit les codes pour les transformer en
-        NMEA 2000, à l'aide de <a href="https://canboat.github.io/canboat/canboat.html" target="_blank"> 'CANBoat'</a>
-        et moi-même qui est analysées les trames du bus CAN, je n'ai pas tous convertit,
+        NMEA 2000, à l'aide de <a href="https://canboat.github.io/canboat/canboat.html" target="_blank"> 'CANBoat'</a>, je n'ai pas tous convertit,
         mais j'ai tout ce qu'il y a sur mon bateau, j'ai réalisé les cartes maritimes à l'aide de
         <a href="https://sasplanet.geojamal.com/search/label/Download" target ="_blank">'SASPlanet'</a> sous <a href="https://leafletjs.com/" target ="_blank">'Leaflet'</a> sur
         lesquels j'ai mis mon bateau et les autres sous AIS avec une projection en minutes, j'ai installé le suivi
