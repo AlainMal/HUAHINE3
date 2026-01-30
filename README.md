@@ -255,4 +255,4 @@ Remarque : Si vous êtes branché à la place de la terminaison, il faut ajouter
         en laissant les numéros de trames de côté, peut-être en prenant les 6 octets pour la trame 0 et les 7 octets pour les autres de poids fort, simplement sur les
         trames qui ont plus de 8 octets (fast-packet PGN) et je pense qu'il prend toutes les trames d'un même PGN et aprés qu'il lance le décodage de tous les bits,
         moi, je décode trame par trame et je fais une mise en mémoire pour les trames dont les codes se situent sur
-        plusieurs trames, mais je suis un peu plus rapide.
+        plusieurs trames.
