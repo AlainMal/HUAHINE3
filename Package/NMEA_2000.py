@@ -1317,7 +1317,7 @@ class NMEA2000:
                                     current_pos += 1
 
                             # Publier la portion reçue dans cette trame
-                            self._pgn2 = f"Portion (z={z})"
+                            self._pgn2 = "Configuration"
                             self._valeurChoisie2 = "".join(portion_chars)
 
                             # Si on a reçu suffisamment de données, assembler la chaîne complète
