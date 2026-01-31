@@ -238,8 +238,7 @@ Remarque : Si vous êtes branché à la place de la terminaison, il faut ajouter
         elle évolue en permanence. Je me suis fait aider des AI, pour le JavaScript, le Python et le CSS,
         certaine sont gratuites, mais les payantes sont excellentes. D'autre part je suis partie depuis le USBCAN dont
         j'ai traduit les codes pour les transformer en
-        NMEA 2000, à l'aide de <a href="https://canboat.github.io/canboat/canboat.html" target="_blank"> 'CANBoat'</a>
-        et moi-même qui est analysées les trames du bus CAN, je n'ai pas tous convertit,
+        NMEA 2000, à l'aide de <a href="https://canboat.github.io/canboat/canboat.html" target="_blank"> 'CANBoat'</a>, je n'ai pas tous convertit,
         mais j'ai tout ce qu'il y a sur mon bateau, j'ai réalisé les cartes maritimes à l'aide de
         <a href="https://sasplanet.geojamal.com/search/label/Download" target ="_blank">'SASPlanet'</a> sous <a href="https://leafletjs.com/" target ="_blank">'Leaflet'</a> sur
         lesquels j'ai mis mon bateau et les autres sous AIS avec une projection en minutes, j'ai installé le suivi
@@ -256,4 +255,4 @@ Remarque : Si vous êtes branché à la place de la terminaison, il faut ajouter
         en laissant les numéros de trames de côté, peut-être en prenant les 6 octets pour la trame 0 et les 7 octets pour les autres de poids fort, simplement sur les
         trames qui ont plus de 8 octets (fast-packet PGN) et je pense qu'il prend toutes les trames d'un même PGN et aprés qu'il lance le décodage de tous les bits,
         moi, je décode trame par trame et je fais une mise en mémoire pour les trames dont les codes se situent sur
-        plusieurs trames, mais je suis un peu plus rapide.
+        plusieurs trames.
