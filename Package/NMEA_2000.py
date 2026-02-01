@@ -1254,7 +1254,7 @@ class NMEA2000:
 
 
                 case 126998:
-                    # Configuration Information (PGN 126998) - Fast Packet
+                    # Configuration Information (PGN 126998). Fast Packet
                     # z = numéro de trame (datas[0] & 0x1F)
                     # Première trame : datas[2] = nombre d'octets, datas[3] = mode (0 ou 1)
                     # Trames suivantes : datas[0] = z, données commencent à datas[1]
@@ -1310,7 +1310,7 @@ class NMEA2000:
                                         portion_chars.append(chr(b))
                                     current_pos += 1
                                 else:
-                                    # On a dépassé la longueur attendue, s'arrêter sur 0xFF/0x00
+                                    # On a dépassé la longueur attendue, s'arrêter sur 0xFF/0x00.
                                     if b in (0xFF, 0x00):
                                         break
                                     portion_chars.append(chr(b))

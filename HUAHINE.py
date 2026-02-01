@@ -263,7 +263,7 @@ class MainWindow(QMainWindow):
             self.on_click_table(index)  # On va sur "on_click_table".sus. -----------------------------------------
     def on_click_table(self, index: QModelIndex):
         model = self.table_can.model()  # Récupérer le modèle de la table
-        ligne = index.row()  # Récupérer l'indice de la ligne cliquée
+        ligne = index.row()  # Récupérer l'indice de la ligne cliqué
 
         if isinstance(model, TableModel):
             # Récupère directement les données de la ligne grâce aux méthodes publiques
@@ -1017,12 +1017,12 @@ class MapTileService:
         """Retourne le dossier de base pour résoudre les chemins (exécutable si congelé, sinon dossier du script)."""
         if getattr(sys, 'frozen', False):
             return os.path.dirname(sys.executable)
-        # Mode dev: dossier du fichier HUAHINE.py, pas le répertoire courant
+        # Mode dev : dossier du fichier HUAHINE.py, pas le répertoire courant
         return os.path.dirname(os.path.abspath(__file__))
 
     @staticmethod
     def resolve_mbtiles_path(relative_path):
-        """Construit un chemin absolu vers un fichier .mbtiles en évitant toute dépendance au répertoire courant."""
+        """Construit un chemin absolu vers un fichier '.mbtiles' en évitant toute dépendance au répertoire courant."""
         base = MapTileService._base_dir()
         return os.path.join(base, relative_path)
 
